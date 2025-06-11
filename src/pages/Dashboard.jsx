@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Sidebar from '../components/SideBar';
 import DataTable from '../components/DataTable';
-import FilterControls from '../components/Filtercontrols';
+import FilterControls from '../components/FilterControls';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import AddCandidateModal from '../components/AddCandidateForm';
