@@ -11,6 +11,7 @@ export default function Sidebar({ sections, onSearch, isOpen, onClose }) {
       onSearch(query)
     }
   }
+  
 
   return (
     <aside className={`sidebar ${isOpen ? "sidebar-open" : ""}`}>
