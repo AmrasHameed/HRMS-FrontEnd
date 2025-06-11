@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const BACKEND_URL = 'http://localhost:5000'
+const BACKEND_URL = 'https://hrms-backend-26st.onrender.com'
 
 export default function DataTable({
   columns,

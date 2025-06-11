@@ -2,7 +2,7 @@ import axios from 'axios';
 import { store } from '../redux/store';
 import { logout } from '../redux/slices/authSlice';
 
-const BACKEND_URL = 'http://localhost:5000'
+const BACKEND_URL = 'https://hrms-backend-26st.onrender.com'
 const axiosInstance = axios.create({
   baseURL: `${BACKEND_URL}/api`,
   withCredentials: true,
