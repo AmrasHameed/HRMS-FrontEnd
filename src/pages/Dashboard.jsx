@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/SideBar';
 import DataTable from '../components/DataTable';
 import FilterControls from '../components/Filtercontrols';
 import Calendar from 'react-calendar';
