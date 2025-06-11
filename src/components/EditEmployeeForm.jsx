@@ -46,13 +46,16 @@ export default function EditEmployeeModal({
 
   useEffect(() => {
     if (employee) {
+      console.log(employee)
+      const [day, month, year] = (employee.dateOfJoining || '').split('-');
+    const formattedDate = year && month && day ? `${year}-${month}-${day}` : '';
       setInitialValues({
         fullName: employee.employeeName || '',
         emailAddress: employee.emailAddress || '',
         phoneNumber: employee.phoneNumber || '',
         position: employee.position || '',
         department: employee.department || '',
-        dateOfJoining: employee.dateOfJoining || '',
+        dateOfJoining: formattedDate || '',
       });
     }
   }, [employee]);

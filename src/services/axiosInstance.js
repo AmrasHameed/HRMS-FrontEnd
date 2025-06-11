@@ -2,9 +2,9 @@ import axios from 'axios';
 import { store } from '../redux/store';
 import { logout } from '../redux/slices/authSlice';
 
-
+const BACKEND_URL = 'http://localhost:5000'
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: `${BACKEND_URL}/api`,
   withCredentials: true,
 });
 

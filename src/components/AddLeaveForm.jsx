@@ -4,7 +4,11 @@ import * as Yup from 'yup';
 import { X, Calendar, Upload, Search, ChevronDown } from 'lucide-react';
 
 const FILE_SIZE = 2 * 1024 * 1024;
-const SUPPORTED_FORMATS = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+const SUPPORTED_FORMATS = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+];
 
 const validationSchema = Yup.object({
   employeeName: Yup.string().required('Employee name is required'),
@@ -16,11 +20,11 @@ const validationSchema = Yup.object({
   documents: Yup.mixed()
     .nullable()
     .test('fileSize', 'File too large (max 2MB)', (value) => {
-      if (!value) return true; 
+      if (!value) return true;
       return value.size <= FILE_SIZE;
     })
     .test('fileFormat', 'Unsupported file format', (value) => {
-      if (!value) return true; 
+      if (!value) return true;
       return SUPPORTED_FORMATS.includes(value.type);
     }),
 });
@@ -31,6 +35,7 @@ const initialValues = {
   leaveDate: '',
   reason: '',
   documents: null,
+  employeeId: '',
 };
 
 export default function AddLeaveModal({
@@ -46,12 +51,18 @@ export default function AddLeaveModal({
 
   useEffect(() => {
     if (searchQuery) {
-      const filtered = employees.filter((emp) =>
-        emp.employeeName.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+      const filtered = employees.filter((emp) => {
+        return (
+          emp.status === 'Present' &&
+          emp.employeeName.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      });
       setFilteredEmployees(filtered);
     } else {
-      setFilteredEmployees(employees);
+      const presentEmployees = employees.filter(
+        (emp) => emp.status === 'Present'
+      );
+      setFilteredEmployees(presentEmployees);
     }
   }, [searchQuery, employees]);
 
@@ -79,6 +90,7 @@ export default function AddLeaveModal({
   const handleEmployeeSelect = (employee, setFieldValue) => {
     setFieldValue('employeeName', employee.employeeName);
     setFieldValue('designation', employee.position);
+    setFieldValue('employeeId', employee.id);
     setSearchQuery(employee.employeeName);
     setShowDropdown(false);
   };

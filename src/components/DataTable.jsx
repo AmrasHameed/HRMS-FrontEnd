@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+const BACKEND_URL = 'http://localhost:5000'
+
 export default function DataTable({
   columns,
   data,
@@ -137,7 +139,15 @@ export default function DataTable({
     // Handle document cells
     if (column.key === 'docs' && value) {
       return (
-        <a href="#" className="doc-link" onClick={(e) => e.stopPropagation()}>
+        <a
+          href="#"
+          className="doc-link"
+          onClick={(e) => {
+            const fileUrl = `${BACKEND_URL}${value}`;
+            window.open(fileUrl, '_blank');
+            e.stopPropagation();
+          }}
+        >
           {value}
         </a>
       );
@@ -205,6 +215,12 @@ export default function DataTable({
                 )}
               </tr>
             ))}
+            <tr className="spacer-row">
+              <td
+                colSpan={columns.length + (actions?.length ? 1 : 0)}
+                style={{ height: '100px', border: 'none' }}
+              ></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -245,6 +261,12 @@ export default function DataTable({
           padding: 16px;
           border-bottom: 1px solid #e5e7eb;
           font-size: 14px;
+        }
+
+
+        .data-table tbody tr:last-child {
+          margin-bottom:100px;
+          padding-bottom:100px;
         }
 
         .data-table tbody tr:hover {
@@ -342,7 +364,7 @@ export default function DataTable({
           border-radius: 6px;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
           min-width: 150px;
-          z-index: 10;
+          z-index: 20;
         }
 
         .dropdown-item {

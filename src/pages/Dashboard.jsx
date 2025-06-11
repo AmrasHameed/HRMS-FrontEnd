@@ -15,161 +15,8 @@ import LogoutModal from '../components/LogoutModal';
 import { toast } from 'sonner';
 import axiosInstance from '../services/axiosInstance';
 
-const sampleCandidates = [
-  {
-    srNo: "01",
-    candidatesName: "Jacob William",
-    emailAddress: "jacob.william@example.com",
-    phoneNumber: "(252) 555-0111",
-    department: "Software Development",
-    position: "Senior",
-    displayPosition: "Software Development Senior",
-    status: "New",
-    experience: "1+",
-  },
-  {
-    srNo: "02",
-    candidatesName: "Guy Hawkins",
-    emailAddress: "kenzi.lawson@example.com",
-    phoneNumber: "(907) 555-0101",
-    department: "Human Resources",
-    position: "Full Time",
-    displayPosition: "Human Resources Full Time",
-    status: "New",
-    experience: "2+",
-  },
-  {
-    srNo: "03",
-    candidatesName: "Arlene McCoy",
-    emailAddress: "arlene.mccoy@example.com",
-    phoneNumber: "(302) 555-0107",
-    department: "Design",
-    position: "Full Time",
-    displayPosition: "Design Full Time",
-    status: "Selected",
-    experience: "3+",
-  },
-  {
-    srNo: "04",
-    candidatesName: "Leslie Alexander",
-    emailAddress: "willie.jennings@example.com",
-    phoneNumber: "(207) 555-0119",
-    department: "Software Development",
-    position: "Full Time",
-    displayPosition: "Software Development Full Time",
-    status: "Rejected",
-    experience: "0",
-  },
-]
 
-const sampleEmployees = [
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    employeeName: 'Robert Smith',
-    emailAddress: 'robert.smith@example.com',
-    phoneNumber: '(301) 555-6789',
-    position: 'Frontend Developer',
-    department: 'Engineering',
-    dateOfJoining: '2022-04-15',
-  },
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    employeeName: 'Sarah Johnson',
-    emailAddress: 'sarah.johnson@example.com',
-    phoneNumber: '(406) 555-3412',
-    position: 'UI/UX Designer',
-    department: 'Design',
-    dateOfJoining: '2021-11-02',
-  },
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    employeeName: 'Michael Chen',
-    emailAddress: 'michael.chen@example.com',
-    phoneNumber: '(512) 555-9876',
-    position: 'Backend Developer',
-    department: 'Engineering',
-    dateOfJoining: '2023-01-10',
-  },
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    employeeName: 'Alicia Rodriguez',
-    emailAddress: 'alicia.rodriguez@example.com',
-    phoneNumber: '(702) 555-4321',
-    position: 'HR Manager',
-    department: 'Human Resources',
-    dateOfJoining: '2021-08-22',
-  },
-];
-
-const sampleAttendance = [
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    employeeName: 'Robert Smith',
-    position: 'Frontend Developer',
-    department: 'Engineering',
-    task: 'Homepage redesign',
-    status: 'Medical Leave',
-  },
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    employeeName: 'Sarah Johnson',
-    position: 'UI/UX Designer',
-    department: 'Design',
-    task: 'User research',
-    status: 'Absent',
-  },
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    employeeName: 'Michael Chen',
-    position: 'Backend Developer',
-    department: 'Engineering',
-    task: 'API development',
-    status: 'Present',
-  },
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    employeeName: 'Alicia Rodriguez',
-    position: 'HR Manager',
-    department: 'Human Resources',
-    task: 'Recruitment process',
-    status: 'Work From Home',
-  },
-];
-
-const sampleLeaves = [
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    name: 'Robert Smith',
-    date: '2023-06-15 ',
-    reason: 'Family vacation',
-    status: 'Approved',
-    docs: 'vacation-request.pdf',
-  },
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    name: 'Sarah Johnson',
-    date: '2023-06-22',
-    reason: 'Medical appointment',
-    status: 'Pending',
-    docs: 'medical-note.pdf',
-  },
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    name: 'Michael Chen',
-    date: '2023-07-01',
-    reason: 'Personal leave',
-    status: 'Approved',
-    docs: '',
-  },
-  {
-    profileImage: '/placeholder.svg?height=40&width=40',
-    name: 'Alicia Rodriguez',
-    date: '2023-06-30',
-    reason: 'Family emergency',
-    status: 'Rejected',
-    docs: 'emergency-form.pdf',
-  },
-];
+const BACKEND_URL = 'http://localhost:5000'
 
 export default function Dashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -186,17 +33,15 @@ export default function Dashboard() {
 
   const [activeSection, setActiveSection] = useState(getSectionFromUrl());
 
-  const [candidates, setCandidates] = useState(sampleCandidates);
-  const [employees, setEmployees] = useState(sampleEmployees);
-  const [attendance, setAttendance] = useState(sampleAttendance);
-  const [leaves, setLeaves] = useState(sampleLeaves);
+  const [candidates, setCandidates] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [attendance, setAttendance] = useState([]);
+  const [leaves, setLeaves] = useState([]);
 
-  const [filteredCandidates, setFilteredCandidates] =
-    useState(sampleCandidates);
-  const [filteredEmployees, setFilteredEmployees] = useState(sampleEmployees);
-  const [filteredAttendance, setFilteredAttendance] =
-    useState(sampleAttendance);
-  const [filteredLeaves, setFilteredLeaves] = useState(sampleLeaves);
+  const [filteredCandidates, setFilteredCandidates] = useState([]);
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [filteredAttendance, setFilteredAttendance] = useState([]);
+  const [filteredLeaves, setFilteredLeaves] = useState([]);
 
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [selectedPosition, setSelectedPosition] = useState('all');
@@ -239,54 +84,345 @@ export default function Dashboard() {
     setSearchParams({ section });
   };
 
+  //get-candidate
+  const fetchAllCandidates = async () => {
+    try {
+      const [candidateRes, employeeRes, leaves] = await Promise.all([
+        axiosInstance.get('/candidates'),
+        axiosInstance.get('/employees'),
+        axiosInstance.get('/leaves'),
+      ]);
+      const transformedCandidates = candidateRes.data.map((c, index) => ({
+        srNo: String(index + 1).padStart(2, '0'),
+        candidatesName: c.fullName,
+        emailAddress: c.emailAddress,
+        phoneNumber: c.phoneNumber,
+        department: c.department,
+        position: c.position,
+        displayPosition: `${c.department} ${c.position}`,
+        status: c.status,
+        experience: c.experience,
+        resumeUrl: c.resumeUrl,
+        id: c._id,
+      }));
+      const transformedEmployees = employeeRes.data.map((e, index) => ({
+        srNo: String(index + 1 + transformedCandidates.length).padStart(2, '0'),
+        employeeName: e.fullName,
+        emailAddress: e.emailAddress,
+        phoneNumber: e.phoneNumber,
+        department: e.department,
+        position: e.position,
+        dateOfJoining: e.dateOfJoining,
+        status: e.attendanceStatus || null,
+        id: e._id,
+        isEmployee: e.isEmployee,
+      }));
+      const transformedAttendance = employeeRes.data.map((e, index) => ({
+        employeeName: e.fullName,
+        emailAddress: e.emailAddress,
+        phoneNumber: e.phoneNumber,
+        department: e.department,
+        position: e.position,
+        status: e.attendanceStatus,
+        task: 'HRMS Development',
+        id: e._id,
+        isEmployee: e.isEmployee,
+      }));
+      const transformedLeaves = leaves.data.map((e, index) => ({
+        profileImage: './profile.jpg',
+        name: e.employeeName,
+        date: e.leaveDate,
+        reason: e.reason,
+        status: e.status,
+        docs: e.documents,
+        id: e._id,
+      }));
+      return {
+        candidates: transformedCandidates,
+        employees: transformedEmployees,
+        attendance: transformedAttendance,
+        leaves: transformedLeaves,
+      };
+    } catch (error) {
+      console.error('Error fetching candidates:', error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    const getCandidates = async () => {
+      try {
+        const { candidates, employees, attendance, leaves } =
+          await fetchAllCandidates();
+        setCandidates(candidates);
+        setEmployees(employees);
+        setAttendance(attendance);
+        setLeaves(leaves);
+      } catch (error) {
+        console.error('Failed to load candidates');
+      }
+    };
+
+    getCandidates();
+  }, []);
+
   //add-candidate
 
   const handleAddCandidate = async (candidateData) => {
     try {
-      const formData = new FormData()
-      formData.append("fullName", candidateData.fullName)
-      formData.append("emailAddress", candidateData.emailAddress)
-      formData.append("phoneNumber", candidateData.phoneNumber)
-      formData.append("position", candidateData.position)
-      formData.append("department", candidateData.department)
-      formData.append("experience", candidateData.experience)
-      formData.append("status", "New")
-      formData.append("resume", candidateData.resume)
-      const {data} = await axiosInstance.post("/candidates", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      const formData = new FormData();
+      formData.append('fullName', candidateData.fullName);
+      formData.append('emailAddress', candidateData.emailAddress);
+      formData.append('phoneNumber', candidateData.phoneNumber);
+      formData.append('position', candidateData.position);
+      formData.append('department', candidateData.department);
+      formData.append('experience', candidateData.experience);
+      formData.append('status', 'New');
+      formData.append('resume', candidateData.resume);
+      const { data } = await axiosInstance.post(
+        '/candidates/addCandidate',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         }
-      })
-      if(data.msg === 'success') {
+      );
+      if (data.msg === 'success') {
         const newCandidate = {
-          srNo: String(candidates.length + 1).padStart(2, "0"),
+          srNo: String(candidates.length + 1).padStart(2, '0'),
           candidatesName: data.fullName || candidateData.fullName,
           emailAddress: data.emailAddress || candidateData.emailAddress,
           phoneNumber: data.phoneNumber || candidateData.phoneNumber,
           position: data.position || candidateData.position,
           department: data.department || candidateData.department,
-          displayPosition: data.displayPosition || candidateData.displayPosition,
-          status: data.status || "New",
+          displayPosition: candidateData.displayPosition,
+          status: data.status || 'New',
           experience: data.experience || candidateData.experience,
           id: data.id,
           resumeUrl: data.resumeUrl,
-        }
-        setCandidates([...candidates, newCandidate])
-        console.log("Candidate added successfully:", response.data)
-        toast.success("Candidate added successfully!")
+        };
+        setCandidates([...candidates, newCandidate]);
+        console.log('Candidate added successfully:', data);
+        toast.success('Candidate added successfully!');
       }
     } catch (error) {
-      console.error("Error adding candidate:", error)
+      console.error('Error adding candidate:', error);
       if (error.response) {
-        const errorMessage = error.response.data?.message || "Failed to add candidate"
-        console.error("Server error:", errorMessage)
-        toast.error(`Error: ${errorMessage}`)
+        const errorMessage =
+          error.response.data?.message || 'Failed to add candidate';
+        console.error('Server error:', errorMessage);
+        toast.error(`Error: ${errorMessage}`);
       } else if (error.request) {
-        console.error("Network error:", error.request)
-        toast.error("Network error. Please check your connection.")
+        console.error('Network error:', error.request);
+        toast.error('Network error. Please check your connection.');
       } else {
-        console.error("Error:", error.message)
-        toast.error("An unexpected error occurred.")
+        console.error('Error:', error.message);
+        toast.error('An unexpected error occurred.');
+      }
+    }
+  };
+
+  //candidate-status
+
+  const handleCandidateStatusChange = async (
+    rowIndex,
+    newStatus,
+    candidate
+  ) => {
+    try {
+      const { data } = await axiosInstance.patch(
+        `/candidates/${candidate.id}`,
+        {
+          status: newStatus,
+        }
+      );
+      if (data.msg === 'success') {
+        const updatedCandidates = candidates.map((c) =>
+          c.id === candidate.id ? { ...c, status: newStatus } : c
+        );
+        setCandidates(updatedCandidates);
+        toast.success(`Candidate status updated to ${newStatus}`);
+        console.log('Candidate status updated:', data);
+      }
+    } catch (error) {
+      console.error('Error updating candidate status:', error);
+      if (error.response) {
+        const errorMessage =
+          error.response.data?.message || 'Failed to update candidate status';
+        toast.error(`Error: ${errorMessage}`);
+      } else if (error.request) {
+        toast.error('Network error. Please check your connection.');
+      } else {
+        toast.error('An unexpected error occurred.');
+      }
+    }
+  };
+
+  //edit-employee
+
+  const handleUpdateEmployee = async (values) => {
+    try {
+      const [year, month, day] = values.dateOfJoining.split('-');
+      const formattedDate = `${day}-${month}-${year}`;
+      const updatedData = {
+        employeeName: values.fullName,
+        emailAddress: values.emailAddress,
+        phoneNumber: values.phoneNumber,
+        position: values.position,
+        department: values.department,
+        dateOfJoining: formattedDate,
+      };
+
+      const { data } = await axiosInstance.put(
+        `/employees/${selectedEmployee.id}`,
+        updatedData
+      );
+
+      if (data.msg === 'success') {
+        const updatedEmployees = employees.map((emp) =>
+          emp.emailAddress === selectedEmployee.emailAddress
+            ? { ...emp, ...updatedData }
+            : emp
+        );
+        setEmployees(updatedEmployees);
+        toast.success('Employee updated successfully!');
+      } else {
+        toast.error('Failed to update employee. Please try again.');
+      }
+
+      console.log('Employee updated:', values);
+    } catch (error) {
+      console.error('Error updating employee:', error);
+      toast.error('An error occurred while updating the employee.');
+    }
+  };
+
+  //edit-employee-status
+
+  const handleAttendanceStatusChange = async (
+    rowIndex,
+    newStatus,
+    employee
+  ) => {
+    try {
+      const { data } = await axiosInstance.patch(`/employees/${employee.id}`, {
+        attendanceStatus: newStatus,
+      });
+      if (data.msg === 'success') {
+        const updatedAttendance = attendance.map((emp) => {
+          return emp.id === employee.id ? { ...emp, status: newStatus } : emp;
+        });
+
+        setAttendance(updatedAttendance);
+        toast.success(
+          `${employee.employeeName}'s attendance updated to ${newStatus}`
+        );
+        console.log('Attendance status updated:', {
+          employee: employee.employeeName,
+          status: newStatus,
+        });
+      } else {
+        toast.error('Failed to update attendance status. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error updating attendance status:', error);
+      if (error.response) {
+        const errorMessage =
+          error.response.data?.message || 'Failed to update attendance status';
+        toast.error(`Error: ${errorMessage}`);
+      } else if (error.request) {
+        toast.error('Network error. Please check your connection.');
+      } else {
+        toast.error('An unexpected error occurred.');
+      }
+    }
+  };
+
+  //add-leaves
+
+  const handleAddLeave = async (values) => {
+    try {
+      const formData = new FormData();
+      formData.append('employeeName', values.employeeName);
+      formData.append('leaveDate', values.leaveDate);
+      formData.append('reason', values.reason);
+      formData.append('status', 'Pending');
+      formData.append('designation', values.designation);
+      formData.append('documents', values.documents);
+      formData.append('employeeId', values.employeeId);
+      const { data } = await axiosInstance.post('/leaves/addLeave', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (data.msg === 'success') {
+        const newLeave = {
+          profileImage: '/profile.jpg',
+          name: data.newLeave.employeeName,
+          date: data.newLeave.leaveDate,
+          reason: data.newLeave.reason,
+          status: data.newLeave.status,
+          docs: data.newLeave.documents,
+          id: data._id,
+        };
+        setLeaves([...leaves, newLeave]);
+        toast.success('Leave added successfully!');
+        console.log('New leave added:', newLeave);
+      } else {
+        toast.error('Failed to add leave. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error adding leave:', error);
+      if (error.response) {
+        const errorMessage =
+          error.response.data?.message || 'Failed to add leave';
+        toast.error(`Error: ${errorMessage}`);
+      } else if (error.request) {
+        toast.error('Network error. Please check your connection.');
+      } else {
+        toast.error('An unexpected error occurred.');
+      }
+    }
+  };
+
+  //edit-leave-status
+
+  const handleLeaveStatusChange = async (rowIndex, newStatus, leave) => {
+    try {
+      console.log(leave)
+      const { data } = await axiosInstance.patch(`/leaves/${leave.id}`, {
+        status: newStatus,
+      });
+
+      if (data.msg === 'success') {
+        const updatedLeaves = leaves.map((item) =>
+          item._id === leave._id ? { ...item, status: newStatus } : item
+        );
+
+        setLeaves(updatedLeaves);
+
+        toast.success(
+          `${leave?.name}'s leave status updated to ${newStatus}`
+        );
+        console.log('Leave status updated:', {
+          employee: leave.employeeName,
+          status: newStatus,
+        });
+      } else {
+        toast.error('Failed to update leave status. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error updating leave status:', error);
+      if (error.response) {
+        const errorMessage =
+          error.response.data?.message || 'Failed to update leave status';
+        toast.error(`Error: ${errorMessage}`);
+      } else if (error.request) {
+        toast.error('Network error. Please check your connection.');
+      } else {
+        toast.error('An unexpected error occurred.');
       }
     }
   };
@@ -305,8 +441,10 @@ export default function Dashboard() {
 
     if (selectedPosition !== 'all') {
       filtered = filtered.filter((candidate) =>
-        candidate.displayPosition.toLowerCase().includes(selectedPosition.toLowerCase()),
-      )
+        candidate.displayPosition
+          .toLowerCase()
+          .includes(selectedPosition.toLowerCase())
+      );
     }
 
     if (searchQuery) {
@@ -318,8 +456,10 @@ export default function Dashboard() {
           candidate.emailAddress
             .toLowerCase()
             .includes(searchQuery.toLowerCase()) ||
-          candidate.displayPosition.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          candidate.department.toLowerCase().includes(searchQuery.toLowerCase()),
+          candidate.displayPosition
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase()) ||
+          candidate.department.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
 
@@ -380,7 +520,6 @@ export default function Dashboard() {
     setFilteredAttendance(filtered);
   }, [attendance, selectedStatus, searchQuery]);
 
-
   //leaves-filter
 
   useEffect(() => {
@@ -405,14 +544,20 @@ export default function Dashboard() {
 
   //calendar-count
 
+  const parseDDMMYYYY = (dateStr) => {
+    const [dd, mm, yyyy] = dateStr.split('-');
+    return new Date(`${yyyy}-${mm}-${dd}`);
+  };
+
   const getApprovedLeavesForDate = (date) => {
     return leaves.filter((leave) => {
-      if (leave.status.toLowerCase() === 'approved') {
+      if (leave?.status?.toLowerCase() === 'approved') {
         const dateRange = leave.date.split(' to ');
-        const startDate = new Date(dateRange[0]);
+        const startDate = parseDDMMYYYY(dateRange[0].trim());
         const endDate =
-          dateRange.length > 1 ? new Date(dateRange[1]) : startDate;
+          dateRange.length > 1 ? parseDDMMYYYY(dateRange[1].trim()) : startDate;
 
+        // Normalize all dates to ignore time
         const checkDate = new Date(
           date.getFullYear(),
           date.getMonth(),
@@ -589,12 +734,60 @@ export default function Dashboard() {
   const candidateActions = [
     {
       label: 'Download Resume',
-      onClick: (row) => console.log('Download resume for', row.candidatesName),
+      onClick: async (row) => {
+        try {
+          console.log(row.resumeUrl);
+          if (row.resumeUrl) {
+            const fileUrl = `${BACKEND_URL}${
+              row.resumeUrl
+            }`;
+            window.open(fileUrl, '_blank');
+            toast.success('Resume opened in new tab');
+          } else {
+            toast.error('No resume available for this candidate');
+          }
+        } catch (error) {
+          console.error('Error downloading resume:', error);
+          toast.error('Failed to download resume. Please try again later.');
+        }
+      },
     },
     {
       label: 'Delete Candidate',
-      onClick: (row) => {
-        setCandidates(candidates.filter((c) => c.srNo !== row.srNo));
+      onClick: async (row) => {
+        try {
+          const isConfirmed = window.confirm(
+            `Are you sure you want to delete ${row.candidatesName}? This action cannot be undone.`
+          );
+          if (!isConfirmed) {
+            return;
+          }
+          const { data } = await axiosInstance.delete(`/candidates/${row.id}`);
+          if (data.msg === 'success') {
+            const updatedCandidates = candidates.filter((c) => c.id !== row.id);
+            setCandidates(updatedCandidates);
+            toast.success(
+              `${row.candidatesName} has been deleted successfully`
+            );
+            console.log('Candidate deleted successfully:', row);
+          }
+        } catch (error) {
+          console.error('Error deleting candidate:', error);
+          if (error.response) {
+            const errorMessage =
+              error.response.data?.message || 'Failed to delete candidate';
+            console.error('Server error:', errorMessage);
+            toast.error(`Error: ${errorMessage}`);
+          } else if (error.request) {
+            console.error('Network error:', error.request);
+            toast.error('Network error. Please check your connection.');
+          } else {
+            console.error('Error:', error.message);
+            toast.error(
+              'An unexpected error occurred while deleting the candidate.'
+            );
+          }
+        }
       },
       variant: 'danger',
     },
@@ -610,10 +803,38 @@ export default function Dashboard() {
     },
     {
       label: 'Delete',
-      onClick: (row) => {
-        setEmployees(
-          employees.filter((e) => e.emailAddress !== row.emailAddress)
-        );
+      onClick: async (row) => {
+        try {
+          const isConfirmed = window.confirm(
+            `Are you sure you want to delete ${row.employeeName}? This action cannot be undone.`
+          );
+          if (!isConfirmed) {
+            return;
+          }
+          const { data } = await axiosInstance.delete(`/employees/${row.id}`);
+          if (data.msg === 'success') {
+            const updatedEmployees = employees.filter((c) => c.id !== row.id);
+            setEmployees(updatedEmployees);
+            toast.success(`${row.employeeName} has been deleted successfully`);
+            console.log('Candidate deleted successfully:', row);
+          }
+        } catch (error) {
+          console.error('Error deleting candidate:', error);
+          if (error.response) {
+            const errorMessage =
+              error.response.data?.message || 'Failed to delete candidate';
+            console.error('Server error:', errorMessage);
+            toast.error(`Error: ${errorMessage}`);
+          } else if (error.request) {
+            console.error('Network error:', error.request);
+            toast.error('Network error. Please check your connection.');
+          } else {
+            console.error('Error:', error.message);
+            toast.error(
+              'An unexpected error occurred while deleting the candidate.'
+            );
+          }
+        }
       },
       variant: 'danger',
     },
@@ -669,40 +890,6 @@ export default function Dashboard() {
     }
   };
 
-  const handleUpdateEmployee = (values) => {
-    const updatedEmployees = employees.map((emp) => {
-      if (emp.emailAddress === selectedEmployee.emailAddress) {
-        return {
-          ...emp,
-          employeeName: values.fullName,
-          emailAddress: values.emailAddress,
-          phoneNumber: values.phoneNumber,
-          position: values.position,
-          department: values.department,
-          dateOfJoining: values.dateOfJoining,
-        };
-      }
-      return emp;
-    });
-
-    setEmployees(updatedEmployees);
-    console.log('Employee updated:', values);
-  };
-
-  const handleAddLeave = (values) => {
-    const newLeave = {
-      profileImage: '/placeholder.svg?height=40&width=40',
-      name: values.employeeName,
-      date: values.leaveDate,
-      reason: values.reason,
-      status: 'Pending',
-      docs: values.documents ? values.documents.name : '',
-    };
-
-    setLeaves([...leaves, newLeave]);
-    console.log('New leave added:', newLeave);
-  };
-
   const renderSectionContent = () => {
     switch (activeSection) {
       case 'candidates':
@@ -725,6 +912,7 @@ export default function Dashboard() {
               data={filteredCandidates}
               actions={candidateActions}
               onRowClick={(row) => console.log('Candidate clicked:', row)}
+              onStatusChange={handleCandidateStatusChange}
             />
           </>
         );
@@ -763,6 +951,7 @@ export default function Dashboard() {
               onRowClick={(row) =>
                 console.log('Attendance record clicked:', row)
               }
+              onStatusChange={handleAttendanceStatusChange}
             />
           </>
         );
@@ -788,13 +977,8 @@ export default function Dashboard() {
                     onRowClick={(row) =>
                       console.log('Leave record clicked:', row)
                     }
-                    onStatusChange={(rowIndex, newStatus, row) => {
-                      const updatedLeaves = leaves.map((leave) =>
-                        leave.name === row.name && leave.date === row.date
-                          ? { ...leave, status: newStatus }
-                          : leave
-                      );
-                      setLeaves(updatedLeaves);
+                    onStatusChange={(rowIndex, newStatus, leave) => {
+                      handleLeaveStatusChange(rowIndex, newStatus, leave);
                     }}
                   />
                 </div>
@@ -823,7 +1007,7 @@ export default function Dashboard() {
                     <h5>Approved Leaves</h5>
                     {leaves
                       .filter(
-                        (leave) => leave.status.toLowerCase() === 'approved'
+                        (leave) => leave?.status?.toLowerCase() === 'approved'
                       )
                       .map((leave, index) => (
                         <div key={index} className="approved-leave-item">
@@ -888,7 +1072,7 @@ export default function Dashboard() {
         isOpen={showAddLeaveModal}
         onClose={() => setShowAddLeaveModal(false)}
         onSubmit={handleAddLeave}
-        employees={employees}
+        employees={attendance}
       />
 
       <LogoutModal
